@@ -7,9 +7,9 @@
 
 #include "ElaTabBarPrivate.h"
 #include "ElaTabBarStyle.h"
-#include "private/qtabbar_p.h"
+#include <QtWidgets/private/qtabbar_p.h>
 #include <QTimer>
-ElaTabBar::ElaTabBar(QWidget* parent)
+ElaTabBar::ElaTabBar(QWidget *parent)
     : QTabBar(parent), d_ptr(new ElaTabBarPrivate())
 {
     Q_D(ElaTabBar);
@@ -22,7 +22,7 @@ ElaTabBar::ElaTabBar(QWidget* parent)
     setAcceptDrops(true);
     d->_style = new ElaTabBarStyle(style());
     setStyle(d->_style);
-    d->_tabBarPrivate = dynamic_cast<QTabBarPrivate*>(this->QTabBar::d_ptr.data());
+    d->_tabBarPrivate = dynamic_cast<QTabBarPrivate *>(this->QTabBar::d_ptr.data());
 }
 
 ElaTabBar::~ElaTabBar()
@@ -51,7 +51,7 @@ QSize ElaTabBar::sizeHint() const
     return oldSize.expandedTo(newSize);
 }
 
-void ElaTabBar::mouseMoveEvent(QMouseEvent* event)
+void ElaTabBar::mouseMoveEvent(QMouseEvent *event)
 {
     QTabBar::mouseMoveEvent(event);
     Q_D(ElaTabBar);
@@ -75,7 +75,7 @@ void ElaTabBar::mouseMoveEvent(QMouseEvent* event)
         }
         else
         {
-            auto& pressTabData = d->_tabBarPrivate->tabList[d->_tabBarPrivate->pressedIndex];
+            auto &pressTabData = d->_tabBarPrivate->tabList[d->_tabBarPrivate->pressedIndex];
             QRect firstTabRect = tabRect(0);
 #if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
             QRect pressTabRect = pressTabData->rect;
@@ -117,13 +117,13 @@ void ElaTabBar::mouseMoveEvent(QMouseEvent* event)
     }
 }
 
-void ElaTabBar::dragEnterEvent(QDragEnterEvent* event)
+void ElaTabBar::dragEnterEvent(QDragEnterEvent *event)
 {
     Q_D(ElaTabBar);
     if (event->mimeData()->property("DragType").toString() == "ElaTabBarDrag")
     {
         event->acceptProposedAction();
-        auto mimeData = const_cast<QMimeData*>(event->mimeData());
+        auto mimeData = const_cast<QMimeData *>(event->mimeData());
         d->_mimeData = mimeData;
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         mimeData->setProperty("TabDropIndex", tabAt(event->position().toPoint()));
@@ -140,7 +140,7 @@ void ElaTabBar::dragEnterEvent(QDragEnterEvent* event)
     QTabBar::dragEnterEvent(event);
 }
 
-void ElaTabBar::dragMoveEvent(QDragMoveEvent* event)
+void ElaTabBar::dragMoveEvent(QDragMoveEvent *event)
 {
     Q_D(ElaTabBar);
     if (event->mimeData()->property("DragType").toString() == "ElaTabBarDrag")
@@ -151,7 +151,7 @@ void ElaTabBar::dragMoveEvent(QDragMoveEvent* event)
     QWidget::dragMoveEvent(event);
 }
 
-void ElaTabBar::dragLeaveEvent(QDragLeaveEvent* event)
+void ElaTabBar::dragLeaveEvent(QDragLeaveEvent *event)
 {
     Q_D(ElaTabBar);
     if (d->_mimeData)
@@ -164,7 +164,7 @@ void ElaTabBar::dragLeaveEvent(QDragLeaveEvent* event)
     QTabBar::dragLeaveEvent(event);
 }
 
-void ElaTabBar::dropEvent(QDropEvent* event)
+void ElaTabBar::dropEvent(QDropEvent *event)
 {
     Q_D(ElaTabBar);
     d->_mimeData = nullptr;
@@ -172,7 +172,7 @@ void ElaTabBar::dropEvent(QDropEvent* event)
     QApplication::sendEvent(this, &releaseEvent);
     if (objectName() != "ElaCustomTabBar")
     {
-        QMimeData* data = const_cast<QMimeData*>(event->mimeData());
+        QMimeData *data = const_cast<QMimeData *>(event->mimeData());
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         data->setProperty("TabDropIndex", tabAt(event->position().toPoint()));
 #else
@@ -183,13 +183,13 @@ void ElaTabBar::dropEvent(QDropEvent* event)
     QTabBar::dropEvent(event);
 }
 
-void ElaTabBar::wheelEvent(QWheelEvent* event)
+void ElaTabBar::wheelEvent(QWheelEvent *event)
 {
     QTabBar::wheelEvent(event);
     event->accept();
 }
 
-void ElaTabBar::paintEvent(QPaintEvent* event)
+void ElaTabBar::paintEvent(QPaintEvent *event)
 {
     Q_D(ElaTabBar);
     QSize tabSize = d->_style->getTabSize();
