@@ -94,14 +94,16 @@ void ElaWindowPrivate::onThemeReadyChange()
         _appBar->setIsOnlyAllowMinAndClose(true);
         if (!_animationWidget)
         {
-            QPoint centerPos = q->mapFromGlobal(QCursor::pos());
             _animationWidget = new ElaThemeAnimationWidget(q);
             connect(_animationWidget, &ElaThemeAnimationWidget::animationFinished, this, [=]() {
                 _appBar->setIsOnlyAllowMinAndClose(false);
                 _animationWidget = nullptr;
             });
             _animationWidget->move(0, 0);
+            _animationWidget->resize(q->size());
             _animationWidget->setOldWindowBackground(q->grab(q->rect()).toImage());
+            _animationWidget->raise();
+            _animationWidget->show();
             if (eTheme->getThemeMode() == ElaThemeType::Light)
             {
                 eTheme->setThemeMode(ElaThemeType::Dark);
@@ -120,17 +122,7 @@ void ElaWindowPrivate::onThemeReadyChange()
                 _windowPaintMovie->setFileName(_themeMode == ElaThemeType::Light ? _lightWindowMoviePath : _darkWindowMoviePath);
                 _windowPaintMovie->start();
             }
-            _animationWidget->setCenter(centerPos);
-            qreal topLeftDis = _distance(centerPos, QPoint(0, 0));
-            qreal topRightDis = _distance(centerPos, QPoint(q->width(), 0));
-            qreal bottomLeftDis = _distance(centerPos, QPoint(0, q->height()));
-            qreal bottomRightDis = _distance(centerPos, QPoint(q->width(), q->height()));
-            QList<qreal> disList{topLeftDis, topRightDis, bottomLeftDis, bottomRightDis};
-            std::sort(disList.begin(), disList.end());
-            _animationWidget->setEndRadius(disList[3]);
-            _animationWidget->resize(q->width(), q->height());
             _animationWidget->startAnimation(_pThemeChangeTime);
-            _animationWidget->show();
         }
         break;
     }

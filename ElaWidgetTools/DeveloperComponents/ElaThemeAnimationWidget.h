@@ -1,15 +1,14 @@
 #ifndef ELATHEMEANIMATIONWIDGET_H
 #define ELATHEMEANIMATIONWIDGET_H
 
+#include <QImage>
 #include <QWidget>
 
 #include "ElaProperty.h"
-class ElaThemeAnimationWidget : public QWidget
+class ELA_EXPORT ElaThemeAnimationWidget : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY_CREATE(qreal, Radius)
-    Q_PROPERTY_CREATE(qreal, EndRadius)
-    Q_PROPERTY_CREATE(QPoint, Center)
+    Q_PROPERTY_CREATE(qreal, Progress)
     Q_PROPERTY_CREATE(QImage, OldWindowBackground)
 public:
     explicit ElaThemeAnimationWidget(QWidget* parent = nullptr);
