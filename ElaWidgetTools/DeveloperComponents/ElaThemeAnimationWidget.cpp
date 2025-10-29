@@ -3,7 +3,7 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <algorithm>
-ElaThemeAnimationWidget::ElaThemeAnimationWidget(QWidget* parent)
+ElaThemeAnimationWidget::ElaThemeAnimationWidget(QWidget *parent)
     : QWidget{parent}
 {
     setAttribute(Qt::WA_TransparentForMouseEvents);
@@ -18,22 +18,21 @@ ElaThemeAnimationWidget::~ElaThemeAnimationWidget()
 
 void ElaThemeAnimationWidget::startAnimation(int msec)
 {
-    QPropertyAnimation* themeChangeAnimation = new QPropertyAnimation(this, "pProgress");
+    QPropertyAnimation *themeChangeAnimation = new QPropertyAnimation(this, "pProgress");
     themeChangeAnimation->setDuration(msec);
     themeChangeAnimation->setEasingCurve(QEasingCurve::InOutSine);
-    connect(themeChangeAnimation, &QPropertyAnimation::finished, this, [=]() {
+    connect(themeChangeAnimation, &QPropertyAnimation::finished, this, [=]()
+            {
         Q_EMIT animationFinished();
-        this->deleteLater();
-    });
-    connect(themeChangeAnimation, &QPropertyAnimation::valueChanged, this, [=](const QVariant& value) {
-        update();
-    });
+        this->deleteLater(); });
+    connect(themeChangeAnimation, &QPropertyAnimation::valueChanged, this, [=](const QVariant &value)
+            { update(); });
     themeChangeAnimation->setStartValue(0.0);
     themeChangeAnimation->setEndValue(1.0);
     themeChangeAnimation->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void ElaThemeAnimationWidget::paintEvent(QPaintEvent* event)
+void ElaThemeAnimationWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     if (_pOldWindowBackground.isNull())

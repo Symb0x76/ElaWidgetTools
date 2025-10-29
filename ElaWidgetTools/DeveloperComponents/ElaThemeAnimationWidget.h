@@ -11,14 +11,14 @@ class ELA_EXPORT ElaThemeAnimationWidget : public QWidget
     Q_PROPERTY_CREATE(qreal, Progress)
     Q_PROPERTY_CREATE(QImage, OldWindowBackground)
 public:
-    explicit ElaThemeAnimationWidget(QWidget* parent = nullptr);
+    explicit ElaThemeAnimationWidget(QWidget *parent = nullptr);
     ~ElaThemeAnimationWidget() override;
     void startAnimation(int msec);
 Q_SIGNALS:
     Q_SIGNAL void animationFinished();
 
 protected:
-    virtual void paintEvent(QPaintEvent* event) override;
+    virtual void paintEvent(QPaintEvent *event) override;
 };
 
 #endif // ELATHEMEANIMATIONWIDGET_H

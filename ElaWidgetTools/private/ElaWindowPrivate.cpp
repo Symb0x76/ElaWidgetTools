@@ -12,7 +12,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QtMath>
-ElaWindowPrivate::ElaWindowPrivate(QObject* parent)
+ElaWindowPrivate::ElaWindowPrivate(QObject *parent)
     : QObject{parent}
 {
 }
@@ -31,10 +31,9 @@ void ElaWindowPrivate::onNavigationButtonClicked()
         _navigationBar->setDisplayMode(ElaNavigationType::Maximal, false);
         _navigationBar->move(-_navigationBar->width(), _navigationBar->pos().y());
         _navigationBar->resize(_navigationBar->width(), _navigationCenterStackedWidget->height() + 1);
-        QPropertyAnimation* navigationMoveAnimation = new QPropertyAnimation(_navigationBar, "pos");
-        connect(navigationMoveAnimation, &QPropertyAnimation::finished, this, [=]() {
-            _isNavigationBarExpanded = true;
-        });
+        QPropertyAnimation *navigationMoveAnimation = new QPropertyAnimation(_navigationBar, "pos");
+        connect(navigationMoveAnimation, &QPropertyAnimation::finished, this, [=]()
+                { _isNavigationBarExpanded = true; });
         navigationMoveAnimation->setEasingCurve(QEasingCurve::InOutSine);
         navigationMoveAnimation->setDuration(300);
         navigationMoveAnimation->setStartValue(_navigationBar->pos());
@@ -55,23 +54,23 @@ void ElaWindowPrivate::onWMWindowClickedEvent(QVariantMap data)
         }
         if (_isNavigationBarExpanded)
         {
-            QPropertyAnimation* navigationMoveAnimation = new QPropertyAnimation(_navigationBar, "pos");
-            connect(navigationMoveAnimation, &QPropertyAnimation::valueChanged, this, [=]() {
+            QPropertyAnimation *navigationMoveAnimation = new QPropertyAnimation(_navigationBar, "pos");
+            connect(navigationMoveAnimation, &QPropertyAnimation::valueChanged, this, [=]()
+                    {
                 if (_isNavigationDisplayModeChanged)
                 {
                     _isWMClickedAnimationFinished = true;
                     _resetWindowLayout(false);
                     navigationMoveAnimation->deleteLater();
-                }
-            });
-            connect(navigationMoveAnimation, &QPropertyAnimation::finished, this, [=]() {
+                } });
+            connect(navigationMoveAnimation, &QPropertyAnimation::finished, this, [=]()
+                    {
                 if (!_isNavigationDisplayModeChanged)
                 {
                     _navigationBar->setDisplayMode(ElaNavigationType::Minimal, false);
                     _resetWindowLayout(false);
                 }
-                _isWMClickedAnimationFinished = true;
-            });
+                _isWMClickedAnimationFinished = true; });
             navigationMoveAnimation->setEasingCurve(QEasingCurve::InOutSine);
             navigationMoveAnimation->setDuration(300);
             navigationMoveAnimation->setStartValue(_navigationBar->pos());
@@ -95,10 +94,10 @@ void ElaWindowPrivate::onThemeReadyChange()
         if (!_animationWidget)
         {
             _animationWidget = new ElaThemeAnimationWidget(q);
-            connect(_animationWidget, &ElaThemeAnimationWidget::animationFinished, this, [=]() {
+            connect(_animationWidget, &ElaThemeAnimationWidget::animationFinished, this, [=]()
+                    {
                 _appBar->setIsOnlyAllowMinAndClose(false);
-                _animationWidget = nullptr;
-            });
+                _animationWidget = nullptr; });
             _animationWidget->move(0, 0);
             _animationWidget->resize(q->size());
             _animationWidget->setOldWindowBackground(q->grab(q->rect()).toImage());
@@ -198,7 +197,7 @@ void ElaWindowPrivate::onWindowDisplayModeChanged()
 
 void ElaWindowPrivate::onNavigationNodeClicked(ElaNavigationType::NavigationNodeType nodeType, QString nodeKey, bool isRouteBack)
 {
-    QWidget* page = _routeMap.value(nodeKey);
+    QWidget *page = _routeMap.value(nodeKey);
     if (!page)
     {
         // 页脚没有绑定页面
@@ -213,7 +212,7 @@ void ElaWindowPrivate::onNavigationNodeClicked(ElaNavigationType::NavigationNode
     _navigationCenterStackedWidget->doWindowStackSwitch(_pStackSwitchMode, nodeIndex, isRouteBack);
 }
 
-void ElaWindowPrivate::onNavigationNodeAdded(ElaNavigationType::NavigationNodeType nodeType, QString nodeKey, QWidget* page)
+void ElaWindowPrivate::onNavigationNodeAdded(ElaNavigationType::NavigationNodeType nodeType, QString nodeKey, QWidget *page)
 {
     if (nodeType == ElaNavigationType::PageNode)
     {
@@ -237,11 +236,11 @@ void ElaWindowPrivate::onNavigationNodeRemoved(ElaNavigationType::NavigationNode
     {
         return;
     }
-    QWidget* page = _routeMap.value(nodeKey);
+    QWidget *page = _routeMap.value(nodeKey);
     _routeMap.remove(nodeKey);
     _pageMetaMap.remove(nodeKey);
     _navigationCenterStackedWidget->getContainerStackedWidget()->removeWidget(page);
-    QWidget* currentWidget = _navigationCenterStackedWidget->getContainerStackedWidget()->currentWidget();
+    QWidget *currentWidget = _navigationCenterStackedWidget->getContainerStackedWidget()->currentWidget();
     if (currentWidget)
     {
         q->navigation(currentWidget->property("ElaPageKey").toString());
