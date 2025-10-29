@@ -103,14 +103,9 @@ void ElaWindowPrivate::onThemeReadyChange()
             _animationWidget->setOldWindowBackground(q->grab(q->rect()).toImage());
             _animationWidget->raise();
             _animationWidget->show();
-            if (eTheme->getThemeMode() == ElaThemeType::Light)
-            {
-                eTheme->setThemeMode(ElaThemeType::Dark);
-            }
-            else
-            {
-                eTheme->setThemeMode(ElaThemeType::Light);
-            }
+            const auto current = eTheme->getThemeMode();
+            const auto next = current == ElaThemeType::Light ? ElaThemeType::Dark : ElaThemeType::Light;
+            eTheme->setThemeMode(next);
 
             if (_pWindowPaintMode == ElaWindowType::PaintMode::Movie)
             {
